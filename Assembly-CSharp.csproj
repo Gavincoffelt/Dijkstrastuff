@@ -62,9 +62,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Behaviors.cs" />
-    <Compile Include="Assets\Scripts\controls.cs" />
-    <Compile Include="Assets\Scripts\Dijkstra.cs" />
+    <Compile Include="Assets\Scripts\Control.cs" />
+    <Compile Include="Assets\Scripts\Decisions.cs" />
     <Compile Include="Assets\Scripts\DijkstraManager.cs" />
+    <Compile Include="Assets\Scripts\FiniteSM.cs" />
     <Compile Include="Assets\Scripts\Grid.cs" />
     <Compile Include="Assets\Scripts\Node.cs" />
     <Reference Include="Unity.ProBuilder.AddOns.Editor">
