@@ -5,23 +5,52 @@ using UnityEngine;
 public class Behaviors : MonoBehaviour {
     public float maxvel;
     private GameObject Target;
+    public List<GameObject> Targets;
     private Vector3 Force;
     private float timer;
     Material AI;
     bool hit = false;
-	void Start () {}
+    public float dist;
+    Vector3[] patrolLocations = new Vector3[4];
+    int currentPatrolIndex;
+    private States currentState;
+
+    void Start () 
+{
+        patrolLocations[0] = Targets[0].transform.position;
+        patrolLocations[1] = Targets[1].transform.position;
+        patrolLocations[2] = Targets[2].transform.position;
+        patrolLocations[3] = Targets[3].transform.position;
+        maxvel = 0.2f;
+      //  currentState = States.Patrol;
+        currentPatrolIndex = 0;
+    }
 	
 	void Update () {
+        switch (currentState)
+        {
+            case States.Patrol:
+                Patrol();
+                break;
+            case States.Seek:
+                Seek();
+                break;
+            case States.Flee:
+                Flee();
+                break;
+            default:
+                Debug.LogError("Invalid state!");
+                break;
+        }
         timer += 1 * Time.deltaTime;
-
-        //Seek(Target.transform.position);
         Target = GameObject.FindGameObjectWithTag("Chased");
+        dist = Vector3.Distance(transform.position, Target.transform.position);
         if (tag == "Chaser")
         {
             if (timer > 2)
             {
-                // Seek();
-                WanderFunc();
+                currentState = States.Patrol;
+               //WanderFunc();
                 AI = GetComponent<Renderer>().material;
                 AI.color = Color.red;
                 maxvel = 0.2f;
@@ -30,7 +59,9 @@ public class Behaviors : MonoBehaviour {
 
         if (tag == "Chased")
         {
-            WanderFunc();
+            currentState = States.Flee;
+
+            //WanderFunc();
             Target = GameObject.FindGameObjectWithTag("Chaser");
             AI = GetComponent<Renderer>().material;
             AI.color = Color.green;
@@ -135,4 +166,35 @@ public class Behaviors : MonoBehaviour {
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
         }
     }
+    public enum States
+    {
+        Patrol,
+        Seek,
+        Flee
+    }
+
+    
+   
+
+        
+    
+   
+      
+
+    
+
+    void Patrol()
+    {
+        Vector3 Velocity;
+        Velocity = Vector3.Normalize(patrolLocations[currentPatrolIndex] - transform.position) * maxvel;
+        transform.position = transform.position + Velocity;
+
+    }
+
+
+
+
+
+
+
 }
